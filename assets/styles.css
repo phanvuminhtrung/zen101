@@ -75,6 +75,12 @@ nav img, nav span {
   padding: 1rem;
 }
 
+.site-footer {
+  margin-top: 4rem;
+  font-size: 0.85rem;
+  color: #777;
+}
+
 @media screen and (max-width: 44rem) {
   body {
     margin: 4rem auto 2rem;

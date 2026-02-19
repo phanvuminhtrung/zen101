@@ -2,6 +2,7 @@
 import os
 import re
 import shutil
+from datetime import date
 import markdown2
 import misai
 
@@ -14,6 +15,8 @@ LANGUAGES = {
     'it': '101 Historia Zen',
     'es': '101 Cuentos Zen',
 }
+COPYRIGHT_NAME = 'Troy Phan'
+COPYRIGHT_TEXT = f'© {date.today().year} {COPYRIGHT_NAME}'
 
 
 @misai.filter
@@ -23,10 +26,10 @@ def indent(content, num):
 
 def main():
     path = lambda *pathnames: os.path.join(BASEDIR, *pathnames)
-    read = lambda filepath: open(filepath).read()
-    dump = lambda filepath, content: open(filepath, 'w').write(content)
+    read = lambda filepath: open(filepath, encoding='utf-8').read()
+    dump = lambda filepath, content: open(filepath, 'w', encoding='utf-8').write(content)
 
-    template = misai.Template(open(path('assets', 'base.html')).read())
+    template = misai.Template(open(path('assets', 'base.html'), encoding='utf-8').read())
     markdown = markdown2.Markdown(extras=['smarty-pants', 'break-on-newline'])
 
     allstories = {}
@@ -53,7 +56,10 @@ def main():
         shutil.copy(path('assets', static), path('output', static))
 
     # dump: index
-    params = {'page': 'index', 'lang': '', 'title': '禪', 'langs': LANGUAGES, 'root': '.'}
+    params = {
+        'page': 'index', 'lang': '', 'title': '禪', 'langs': LANGUAGES,
+        'root': '.', 'copyright': COPYRIGHT_TEXT,
+    }
     dump(path('output', 'index.html'), template.render(**params))
 
     # dump: toc & stories
@@ -68,10 +74,14 @@ def main():
                 'title': s['title'], 'body': s['body'],
                 'prev': '../%03d' % (num-1) if num != 1 else None,
                 'next': '../%03d' % (num+1) if num != 101 else None,
+                'copyright': COPYRIGHT_TEXT,
             }
             dump(path('output', lang, '%03d' % num, 'index.html'), template.render(**params))
 
-        params = {'page': 'toc', 'lang': lang, 'title': LANGUAGES[lang], 'stories': stories, 'root': '..'}
+        params = {
+            'page': 'toc', 'lang': lang, 'title': LANGUAGES[lang], 'stories': stories,
+            'root': '..', 'copyright': COPYRIGHT_TEXT,
+        }
         dump(path('output', lang, 'index.html'), template.render(**params))
 
 

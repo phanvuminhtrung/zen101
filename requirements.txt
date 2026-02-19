@@ -1,2 +1,1 @@
-markdown2
-git+https://github.com/phanvuminhtrung
+markdown2==2.5.4
