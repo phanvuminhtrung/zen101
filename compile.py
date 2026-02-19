@@ -57,7 +57,7 @@ def main():
 
     # dump: index
     params = {
-        'page': 'index', 'lang': '', 'title': '禪', 'langs': LANGUAGES,
+        'page': 'index', 'lang': '', 'title': 'Collection of Stone and Sand', 'langs': LANGUAGES,
         'root': '.', 'copyright': COPYRIGHT_TEXT,
     }
     dump(path('output', 'index.html'), template.render(**params))
